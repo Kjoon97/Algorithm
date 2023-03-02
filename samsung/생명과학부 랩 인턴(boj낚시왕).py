@@ -27,7 +27,6 @@ next_mold = [[BLANK for _ in range(m)] for _ in range(n)]
 
 for _ in range(k):
     x,y,s,d,b = map(int,input().split())
-
     # 위, 아래 방향으로 움직이는 경우 2n - 2번 움직이면 다시 제자리로 돌아오게 되므로
     # 움직여야 할 거리를 2n - 2로 나눴을 때의 나머지 만큼만 움직이게 하면 최적화가 가능합니다.
     if d<=2:
@@ -39,6 +38,7 @@ for _ in range(k):
     mold[x-1][y-1] = (b,s,d-1)
 
 ans = 0
+#곰팡이 채집.
 def collect(col):
     global ans
     for row in range(n):
@@ -49,6 +49,7 @@ def collect(col):
             mold[row][col]=BLANK
             break
 
+#다음 위치 구하기.
 def get_next_pos(x,y,dist,dir):
     dx =[-1,1,0,0]
     dy =[0,0,1,-1]
@@ -74,14 +75,15 @@ def get_next_pos(x,y,dist,dir):
 
     return (x,y,dir)
 
-
-
+# (x, y) 위치에 있는 곰팡이를 이동
 def move(x,y):
     size, dist, dir = mold[x][y]
     nx, ny, nd = get_next_pos(x,y,dist,dir)
 
     new_mold = (size,dist,nd)
 
+    # 현재 곰팡이의 크기가 해당 위치에 있던 것 보다 더 큰 경우에만 곰팡이 정보를 업데이트
+    # 그렇지 않은 경우라면 충돌시 사라지게 될 곰팡이이므로 무시.
     if new_mold>next_mold[nx][ny]:
         next_mold[nx][ny]=new_mold
 
